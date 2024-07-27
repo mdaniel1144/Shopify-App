@@ -28,6 +28,7 @@
     margin: auto;
     background-color: wheat;
     border-radius: 50%;
+    object-fit: contain;
 }
 
 .Item-details-container{

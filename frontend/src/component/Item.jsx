@@ -14,7 +14,7 @@ const Item = ({item}) => {
   return (
     <div className='Item-container'>
         <div className='Item-image-container'>
-            <img src='./images/logo.png' alt='' />
+            <img src={item.image? item.image :'./images/logo.png'} />
         </div>
         <div className='Item-details-container'>
             <table>
@@ -27,10 +27,8 @@ const Item = ({item}) => {
                     <td>{item.price}</td>
                 </tr>
                 <tr>
-                    <td><label>discription</label></td>
-                </tr>
-                <tr>
-                    <td colSpan={2}>{item.discription}</td>
+                    <td><label>brand</label></td>
+                    <td>{item.brand}</td>
                 </tr>
                 <tr>
                     <td colSpan={2}>

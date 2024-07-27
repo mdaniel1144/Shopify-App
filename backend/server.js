@@ -40,28 +40,28 @@ app.listen(PORT, () => {
 // Connect to MongoDB
 connectDB();
 
-// Create a route to handle user creation
-const users = [{'username' : 'admin' , 'password' : 'admin', 'email' : 'daniel@n-k.org.il' , 'country' : 'usa' , 'birthday': Date.now() , 'isAdmin' : true , 'isActive' : true}]
-const listitem  = [{'name': 'iphone 4' , 'price': '11$' , 'category' : 'tv'} , {'name': 'iphone x pro', 'price': '11$' , 'category' : 'smartphone'} , {'name': 'iphone 11', 'price': '11$' , 'category' : 'smartphone'} , {'name': 'iphone 11', 'price': '11$', 'category' : 'smartphone'} , {'name': 'iphone 11', 'price': '11$' ,'category' : 'tv'}]
 
 app.get('/HelloWorld', (req, res) => {
   res.send('Hello from the backend!');
 });
 
 // Create a route to get all users
-app.get('/products', (req, res) => {
+app.get('/products', async (req, res) => {
   try {
     const category = req.query.category
-    let filteredItems;
-    if (category) {
-      filteredItems = listitem.filter(item => item.category === category.toLowerCase())
-    } else {
-      filteredItems = listitem;
-    }
 
-    res.status(200).send(filteredItems)
-  } catch (err) {
-    res.status(500).send('An error occurred while fetching products.');
+    let products
+    if (category) {
+      products = await Product.find({ category: category.toLowerCase });
+    } else {
+      // If no category is provided, return all products
+      products = await Product.find()
+    }
+    res.status(200).json(products)
+  }
+  catch (err) {
+    console.error('-->Products:\n   Error fetching products:', err)
+    res.status(500).send('An error occurred while fetching products.')
   }
 })
 
