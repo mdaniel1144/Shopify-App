@@ -1,19 +1,16 @@
 const mongoose = require('mongoose');
 
+const uri = "mongodb+srv://mdaniel114411:NKLVNHSG114411@cluster0.nlfkhqh.mongodb.net/shopfi"
+
 const connectDB = async () => {
-  try {//mongodb+srv://mdaniel114411:<password>@cluster0.nlfkhqh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-    await mongoose.connect('mongodb://localhost:27017/mydatabase', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false, //#
-      useCreateIndex: true    //#
+  try {
+    await mongoose.connect(uri, {
     });
-    console.log('MongoDB connected');
+    console.log("Connected to MongoDB!");
   } catch (err) {
-    console.error(err.message);
+    console.error("Error connecting to MongoDB:", err.message);
     process.exit(1); // Exit process with failure
   }
 };
 
-
-module.exports = connectDB;
+module.exports = { connectDB };

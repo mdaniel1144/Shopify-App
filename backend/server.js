@@ -1,12 +1,13 @@
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
-//const connectDB = require('./config/mongoDB');
-//const User = require('./models/User');
 const path = require('path');
-const { Console } = require('console');
 const app = express();
 const PORT = process.env.PORT || 5000;
+const { connectDB } = require('./config/mongoDB');
+const User = require('./models/User');
+const Product = require('./models/Product');
+
 
 
 app.use(cors({
@@ -35,23 +36,17 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-app.get('/HelloWorld', (req, res) => {
-  res.send('Hello from the backend!');
-});
-
-
-
-
-
-
 
 // Connect to MongoDB
-//connectDB();
+connectDB();
 
 // Create a route to handle user creation
 const users = [{'username' : 'admin' , 'password' : 'admin', 'email' : 'daniel@n-k.org.il' , 'country' : 'usa' , 'birthday': Date.now() , 'isAdmin' : true , 'isActive' : true}]
 const listitem  = [{'name': 'iphone 4' , 'price': '11$' , 'category' : 'tv'} , {'name': 'iphone x pro', 'price': '11$' , 'category' : 'smartphone'} , {'name': 'iphone 11', 'price': '11$' , 'category' : 'smartphone'} , {'name': 'iphone 11', 'price': '11$', 'category' : 'smartphone'} , {'name': 'iphone 11', 'price': '11$' ,'category' : 'tv'}]
 
+app.get('/HelloWorld', (req, res) => {
+  res.send('Hello from the backend!');
+});
 
 // Create a route to get all users
 app.get('/products', (req, res) => {
@@ -85,15 +80,29 @@ app.post('/session' , async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = users.find(u => u.username === username && u.password === password && u.isActive)
-    if (user) {
-      console.log(`-->Login:\n   Trying..\n   username:${username} Connected`)
-      req.session.user = { username: user.username , email : 'daniel@n-k.org.il' , country : 'usa' , birthday: Date.now() , 'isAdmin' : true};
-      res.status(200).json({ user: req.session.user })
-    } else {
-      res.status(401).send('Username or Password is Invalid')
+
+    const user = await User.findOne({ username }).exec();
+    //const user = users.find(u => u.username === username && u.password === password && u.isActive)
+    if (!user) {
+      return res.status(401).send('Username or Password is Invalid');
     }
-  } catch (err) {
+    if(user.password === password && user.isActive){
+      console.log(`-->Login:\n   Trying..\n   username:${username} Connected`)
+      req.session.user = {
+          username: user.username,
+          email: user.email,
+          country: user.country,
+          birthday: user.birthday,
+          isAdmin: user.isAdmin
+        };
+      res.status(200).json({ user: req.session.user })
+    }
+    else{
+      return res.status(401).send('Username or Password is Invalid');
+    }
+
+  } 
+  catch (err) {
     res.status(500).send('A server error occurred. Please try again later.')
   }
 })
