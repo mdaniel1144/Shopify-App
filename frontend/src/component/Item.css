@@ -1,0 +1,84 @@
+.Item-container{
+    display: block;
+    position: relative;
+    height: 130px;
+    width: 420px;
+    padding: 5px;
+}
+
+.Item-image-container{
+    display: inline-block;
+    position: absolute;
+    top: 5px;
+    left: 0px;
+    width: 130px;
+    height: 130px;
+    background-color: whitesmoke;
+    border-radius:50%;
+    z-index: 1;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 5px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+.Item-image-container img{
+    position: relative;
+    width: 110px;
+    height: 110px;
+    top: 10px;
+    margin: auto;
+    background-color: wheat;
+    border-radius: 50%;
+}
+
+.Item-details-container{
+    display: inline-block;
+    position: relative;
+    padding: 10px;
+    padding-left: 85px;
+    left: 20px;
+    width: 250px;
+    height: 110px;
+
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 20px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: whitesmoke;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    text-align: left;;
+    direction: ltr;
+}
+
+.Item-sum{
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    background-color: whitesmoke;
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.6);
+}
+
+.Item-button{
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    min-width: 30px;
+    height: 30px;
+    margin: 5px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    background-color: whitesmoke;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.6);
+}
+
+#Item-cart-add{
+    border-radius: 10px;
+    left: 40px;
+}

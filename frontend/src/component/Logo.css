@@ -1,0 +1,41 @@
+.logo-container{
+    position: relative;
+    display: inline-block;
+    margin: auto;    
+}
+
+.logo-container img{
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 45px;
+}
+
+.logo-container h1{
+    display: inline-block;
+    margin: auto;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    color: #080808;
+    -webkit-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 1px 4px 6px rgba(26, 0, 0, 0.65);
+}
+.logo-container h5{
+    position: relative;
+    display: block;
+    margin: auto;
+    top:-10px;
+    left: -50px;
+}
+
+.logo-container:hover h1 {
+    font-size: 45px;
+}

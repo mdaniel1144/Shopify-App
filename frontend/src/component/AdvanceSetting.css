@@ -1,0 +1,93 @@
+.advanceSetting-container{
+    display: block;
+    position: relative;
+    margin: auto;
+}
+
+
+.advanceSetting-model-container{
+    display: inline-block;
+    position: relative;
+    width: 20%;
+    top: 70px;
+    left: 0;
+    margin: 15px;
+    padding: 10px;
+    vertical-align: top;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.advanceSetting-model-container li{
+    display: block;
+    position: relative;
+    left: 0;
+    margin: 5px;
+    padding: 5px;
+    width: 150px;
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px black solid;
+    cursor: pointer;
+    transition: font-size,width,border-bottom-color,color 0.7s ease;
+}
+
+.advanceSetting-model-container li:hover{
+    font-size: 25px;
+    width: 160px;
+    border-bottom-color: burlywood;
+    color: burlywood;
+}
+
+.advanceSetting-container table{
+    display: inline-block;
+    position: relative;
+    width: 70%;
+    top: 20px;
+    margin: auto;
+    padding: 10px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.advanceSetting-container tbody{
+    display: block;
+    position: relative;
+    margin: auto;
+    box-shadow: 0 0 4px 2px #767779;
+}
+
+
+.advanceSetting-command{
+    display: block;
+    position: relative;
+    margin: auto;
+    height: 60px;
+    width: 100%;
+}
+
+.advanceSetting-command button{
+    display: inline-block;
+    position: absolute;
+    top:17px;
+    width: fit-content;
+    height: 30px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 0 4px 2px #767779;
+}
+.advanceSetting-button-back{
+    left: 0;
+}
+
+.advanceSetting-button-update{
+    right: 0px;
+}

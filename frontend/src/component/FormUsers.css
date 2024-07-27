@@ -1,0 +1,171 @@
+.formuser-container{
+    display: block;
+    position: relative;
+    width: fit-content;
+    margin: 20px;
+    padding: 20px;
+}
+
+.formuser-group-container{
+    display: block;
+    position: relative;
+    margin: 5px auto;
+    width: 400px;
+}
+
+.formuser-group-container label{
+    display: inline-block;
+    position: absolute;
+    margin: 6px;
+    z-index: 1;
+    top: 10px;
+    left: 20px;
+    padding: 3px;
+    background-color: white;
+    transition: transform 0.3s ease, font-size 0.3s ease;
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    pointer-events: none;
+    font-family:Arial, Helvetica, sans-serif
+}
+
+.formuser-group-container input,select{
+    display: inline-block;
+    position: relative;
+    margin: 7px;
+    width: 350px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    padding-left: 15px;
+    transition: box-shadow 0.5s ease;
+    box-shadow: 0 0 0 2px #ccc;
+    outline: none;
+}
+
+
+.formuser-group-container input:focus + label,
+.formuser-group-container input:not(:placeholder-shown) + label {
+    transform: scale(1) translate(10px, -25px);
+    font-size: 14px;
+    color: #007BFF;
+}
+
+.formuser-group-container input:focus{
+    box-shadow: 0 0 0 2px #007BFF;
+}
+
+.formuser-group-container.named select:focus + label,
+.formuser-group-container.named select + label {
+    transform: scale(1) translate(15px, -25px);
+    font-size: 14px;
+    color: black;
+}
+.formuser-group-container.named input:focus + label{
+    color: #007BFF;
+}
+.formuser-group-container.named input:focus + label,
+.formuser-group-container.named input + label {
+    transform: scale(1) translate(15px, -25px);
+    font-size: 14px;
+    color: black;
+}
+.formuser-group-container.named select:focus + label{
+    color: #007BFF;
+}
+
+.formuser-group-container.named.filled label{
+    color: #007BFF;
+}
+
+.formuser-group-container.checked input{
+    box-shadow: none;
+}
+
+.formuser-group-container.checked input:checked + label{
+    transform: translate(0, 0);
+    font-size: larger;
+    color: #007BFF;
+}
+.formuser-group-container.checked input:not(:checked) + label{
+    transform: translate(0, 0);
+    font-size: larger;
+    color: black;
+}
+
+.formuser-group-container select:focus{
+    box-shadow: 0 0 0 2px #007BFF;
+}
+
+
+.formuser-button{
+    display: block;
+    position: relative;
+    width: 100px;
+    height: 50px;
+    padding: 5px;
+    margin: 5px auto;
+    background-color: whitesmoke;
+    box-shadow: 0 0 0 2px #007BFF;
+    outline: none;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: larger;
+    font-weight: bold;
+    transition: font-size 0.3s ease;
+}
+
+.formuser-button:hover{
+    box-shadow: 0 0 0 3px #3b94f2;
+    font-size: x-large;
+}
+
+.formuser-mode-container{
+    display: block;
+    position: relative;
+    width: 600px;
+    height: 60px;
+    background-color: #3b94f2;
+    margin: auto;
+    border-radius: 30px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.formuser-mode-container div{
+    display: block;
+    position: absolute;
+    left:0px;
+    width: 200px;
+    height: 60px;
+    background-color: white;
+    margin: auto;
+    border-radius: 30px;
+    transition: left 0.4s ease;
+    cursor: pointer;
+}
+.formuser-mode-container div.Product{
+    left:0px;
+}
+.formuser-mode-container div.Sales{
+    left:200px;
+}
+.formuser-mode-container div.Users{
+    left:400px;
+}
+
+
+.formuser-mode-container label{
+    position: relative;
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+    top: 15px;
+}
+
+
+.formuser-mode-container div.details{
+    left:200px;
+}
+
