@@ -17,7 +17,7 @@ const NavigationBar = ({user}) => {
         </div>
        <div className='navigation-user-container'>
           {user? 
-          (<h2>Welcome, {user.nickname}</h2>)
+          (<h2>Welcome, {user.username}</h2>)
          :
           (null)
           }

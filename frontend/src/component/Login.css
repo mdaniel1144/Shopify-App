@@ -1,12 +1,14 @@
 .login-container{
-    margin: auto;
     position: relative;
     display: block;
+    margin: auto;
+    padding: 10px;
+    top: 50px;
+    width: fit-content;
     background-color: #282c34;
     border-radius: 10px;
     border: 1px black solid;
-    padding: 10px;
-    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 20px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.5), 0 20px 20px 0 rgba(0, 0, 0, 0.3);
 }
 
 .login-group-container label{

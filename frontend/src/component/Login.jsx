@@ -12,20 +12,21 @@ const Login = () => {
   const [error, setError] = useState(null);
   //const { setUser } = useContext(AuthContext);
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      login(username , password)
+      await login(username , password)
       setError(null); // Clear any previous error
     } catch (error) {
-      setError(error);
+      console.log(error)
+      setError(error.message || 'An unexpected error occurred');
     }
   };
 
   return (
     <div className='login-container'>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div className='login-group-container'>
           <label>Username:</label>
           <input

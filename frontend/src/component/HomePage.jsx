@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from './component/AuthContext';
+import { AuthContext } from './AuthContext';
 import { FaSearch ,FaShoppingCart } from 'react-icons/fa';
 import {Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom'
@@ -14,15 +14,23 @@ import Cart from './Cart'
 import './HomePage.css'
 
 const HomePage = ({user}) => {
-    const [isOpenSearch , setIsopenSearch] = useState(false)
-    const [search , setSearch] = useState('')
+
+  const { logout } = useContext(AuthContext)
+  const [isOpenSearch , setIsopenSearch] = useState(false)
+  const [search , setSearch] = useState('')
 
   return (
     <div className='homepage-container'>
         <div className='navigation-top-container'>
             <div class="navigation-top-command">
-            {!user && (<div><button>SignIn</button>
-                <button>LogIn</button></div>)}
+              {user? 
+                (<button onClick={logout}>LogOut</button>)
+              : (
+                <div style={{display : 'inline-block'}}>
+                  <Link to="/Login"><button>LogIn</button></Link>
+                  <Link to="/Registertion"><button>SignIn</button></Link>
+                </div>)
+              }
                 <div className='homepage-cart-container'>
                 ` <Link to="/Cart">
                     <button>
@@ -42,7 +50,7 @@ const HomePage = ({user}) => {
         </div>
         <div className="App-content">
           <Routes>
-            <Route path="/ListItem" element={<ListItem />}/>
+            <Route path="/" element={<ListItem />}/>
             <Route path="/login" element={<Login />} />
             <Route path="/Cart" element={<Cart />} />
             <Route path="/Registertion" element={<Registertion />} />

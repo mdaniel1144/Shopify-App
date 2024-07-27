@@ -87,7 +87,7 @@
     position: absolute;
     padding: 5px;
     top: 5px;
-    left: 15px;
+    left: 40px;
 }
 
 .navigation-top-command button{
@@ -105,3 +105,6 @@
     border-radius: 20px;
 }
 
+.homepage-cart-container{
+    display: inline-block;
+}

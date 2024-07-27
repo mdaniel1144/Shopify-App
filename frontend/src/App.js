@@ -1,16 +1,19 @@
-import React, { useContext } from 'react';
-import {AuthProvider } from './component/AuthContext';
-import {BrowserRouter as Router} from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { AuthContext, AuthProvider } from './component/AuthContext';
+import { BrowserRouter as Router } from 'react-router-dom';
 import NavigationBar from './component/NavigationBar'
 import HomePage from './component/HomePage'
 
 import './App.css';
 
-function App() {useContext
-
+function App() {
   const { user } = useContext(AuthContext);
 
-  //const user_1 = {'username' : 'daniel' , 'email' : 'daniel@n-k.org.il' , 'country' : 'usa' , 'birthday': Date.now() , 'isAdmin' : true}
+  useEffect(()=>{
+    if (user)
+      console.log(user.username + " Connected")
+  } , [user])
+  //const user_1 = {'username' : 'daniel' , 'email' : 'daniel@n-k.org.il' , 'country' : 'usa' , 'birthday': Date.now()}
 
   return (
     <Router>
@@ -19,7 +22,6 @@ function App() {useContext
         {user && (<NavigationBar user={user}/>)}
       </div>
     </Router>
-   
   );
 }
 
