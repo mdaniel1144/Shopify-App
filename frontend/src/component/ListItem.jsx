@@ -8,17 +8,17 @@ const ListItem = ({}) => {
     const listcategory = ['Smartphone' , 'Computer' , 'Tablet' , 'Tv']
 
     const [listitem , setListItem] = useState(null)
-    const [category , setCategory] = useState('')
     const [chunkedList, setChunkedList] = useState([]);
+    const [question , setQuestion] = useState('')
+    const [answer , setAnswer] = useState('')
 
 
-    const getAllProducts = async (category) => {
+    const getAllProducts = async (question , answer) => {
       try {
         let url = '/products';
-        if (category) {
-          url += `?category=${category}`;
+        if (question && answer) {
+          url += `?question=${question}&answer=${answer}`;
         }
-    
         const result = await axios.get(url);
         setListItem(result.data)
       } catch (error) {
@@ -36,8 +36,8 @@ const ListItem = ({}) => {
       };
 
     useEffect(()=>{
-        getAllProducts(category)
-      } , [category])
+        getAllProducts(question , answer)
+      } , [question , answer])
   
     useEffect(() => {
         if (listitem) {
@@ -71,7 +71,7 @@ const ListItem = ({}) => {
             <label>Category</label>
             <ul className='listitem-category'>
                 {listcategory.map((category,index) => (
-                    <li key={index} onClick={(e)=> setCategory(category)}><img src='' alt=''/>{category}</li>
+                    <li key={index} onClick={(e)=> {setQuestion('category'); setAnswer(category)}}><img src='' alt=''/>{category}</li>
                 ))}
             </ul>
         </div>

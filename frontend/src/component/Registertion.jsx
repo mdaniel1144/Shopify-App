@@ -4,6 +4,8 @@ import axios from 'axios';
 import './Registertion.css'
 
 const Registertion = () => {
+
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

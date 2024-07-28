@@ -48,22 +48,138 @@ app.get('/HelloWorld', (req, res) => {
 // Create a route to get all users
 app.get('/products', async (req, res) => {
   try {
-    const category = req.query.category
+      const question = req.query.question
+      const answer = req.query.answer
 
-    let products
-    if (category) {
-      products = await Product.find({ category: category.toLowerCase });
-    } else {
-      // If no category is provided, return all products
-      products = await Product.find()
+      let query = {};
+      let products;
+
+      if (question && answer) {
+        query[question] = answer.toLowerCase();
+        products = await Product.find(query);
+      }
+      else {
+        products = await Product.find()
+      }
+      res.status(200).json(products)
     }
-    res.status(200).json(products)
+    catch (err) {
+      console.error('-->Products:\n   Error fetching products:', err)
+     res.status(500).send('An error occurred while fetching products.')
+    }
+})
+app.post('/products/update', async (req, res) => {
+  try {
+    const {serial, name, price, brand, date, description, category , image} = req.body;
+
+    // Validate that all required fields are provided
+    if (!serial) {
+      return res.status(400).json({ message: 'Serial number is required' });
+    }
+
+    // Find and update the product
+    const updatedProduct = await Product.findOneAndUpdate(
+      { serial: serial },                                                   // Query to find the product by serial
+      { serial, name, price, brand, date, description, category , image },  // Fields to update
+      { new: true }                                                 // Return the updated document
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.status(200).json(updatedProduct);
+
+  } catch (err) {
+    console.error('-->Products:\n   Error updating product:', err);
+    res.status(500).send('An error occurred while updating the product.');
+  }
+});
+app.post('/products/insert', async (req, res) => {
+  try {
+    const {serial, name, price, brand, date, description, category , image} = req.body;
+
+    // Validate that all required fields are provided
+    if (!serial || !name || !price || !brand || !date || !description || category === 'none') {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Check if a product with the same serial already exists
+    const existingProduct = await Product.findOne({ serial });
+    if (existingProduct) {
+      return res.status(400).json({ message: 'Product with this serial number already exists' });
+    }
+
+    // Create a new product
+    const newProduct = new Product({
+      serial,
+      name,
+      price,
+      brand,
+      date,
+      description,
+      category,
+      image
+    });
+
+    // Save the new product to the database
+    await newProduct.save();
+
+    res.status(201).json(newProduct);
+  } catch (err) {
+    console.error('-->Products:\n   Error inserting product:', err);
+    res.status(500).send('An error occurred while inserting the product.');
+  }
+});
+app.delete('/products/delete/:_id', async (req, res) => {
+  try {
+    // Extract serial from URL parameters
+    const { _id } = req.params;
+
+    // Validate that the serial is provided
+    if (!_id) {
+      return res.status(400).json({ message: 'Serial number is required' });
+    }
+
+    // Find and delete the product by serial
+    const deletedProduct = await Product.findOneAndDelete({_id });
+
+    // Check if the product was found and deleted
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.status(200).json({ message: 'Product deleted successfully', deletedProduct });
+  } catch (err) {
+    console.error('-->Products:\n   Error deleting product:', err);
+    res.status(500).send('An error occurred while deleting the product.');
+  }
+});
+
+
+app.get('/users', async (req, res) => {
+  try {
+      const question = req.query.question
+      const answer = req.query.answer
+
+      let query = {};
+      let users;
+
+      if (question && answer) {
+        query[question] = answer.toLowerCase();
+        users = await User.find(query);
+      } 
+      else {
+        users = await User.find()
+      }
+    res.status(200).json(users)
   }
   catch (err) {
-    console.error('-->Products:\n   Error fetching products:', err)
-    res.status(500).send('An error occurred while fetching products.')
+    console.error('-->Users:\n   Error fetching users:', err)
+    res.status(500).send('An error occurred while fetching users.')
   }
 })
+
+
 
 
 app.post('/session' , async (req, res) => {

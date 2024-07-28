@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './FormProducts.css'
 
 const FormProducts = ({product}) => {
 
-    if (product === null)
-        product = {'serial' : '' , 'name' : '' , 'price' : '' ,'date': Date.now() ,'description':'' ,'category': 'none'}
+  const navigate = useNavigate();
+  const typeMethod = product === null
+  if (product === null)
+        product = {'serial' : '' , 'name' : '' , 'price' : 0 , 'brand' : '' , 'date': Date.now() ,'description':'' ,'category': 'none' , 'image' : ''}
     
   const [serial, setSerial] = useState(product.serial);
   const [name, setName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
+  const [brand, setBrand] = useState(product.brand);
   const [category, setCategory] = useState(product.category);
   const [date, setDate] = useState(new Date(product.date).toISOString().split('T')[0]);
   const [description, setDescription] = useState(product.description);
@@ -17,16 +21,72 @@ const FormProducts = ({product}) => {
 
   const [error, setError] = useState(null);
 
+
+  const validateForm = () => {
+    let isValid = true
+    if (brand.length < 1 || brand.length > 50) {
+      setError("brand must be in range 1-50");
+      isValid = false;
+    } else if (isNaN(price) || price <= 0)  {
+      setError("Price must be a positive number");
+      isValid = false;
+    } else if (serial.length < 1 || serial.length > 100) {
+      setError("serial must be in range 1-150");
+      isValid = false;
+    } else if (name.length < 1 || name.length > 50) {
+      setError("name must be in range 1-50");
+      isValid = false;
+    } else if (description.length < 1 || description.length > 150) {
+      setError("Description must be in range 1-150");
+      isValid = false;
+    }  else if (new Date(date) >= new Date()) {
+      setError("Date must be a date in the past.");
+      isValid = false;
+    } else if (category === 'none') {
+      setError('Please select a category.');
+      isValid = false;
+    }
+    
+    return isValid;
+  };
+
   
-  const UpdateProductsSubmit = async (event) => {
+  const handelProductsSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/UpdatePasswordSubmit', {  }, { withCredentials: true });
-      setError(null); // Clear any previous error
-    } catch (error) {
-      setError('Invalid username or password');
+      if(validateForm()){
+        const jsonData = {
+          serial,
+          name,
+          price,
+          brand,
+          date,
+          description,
+          category,
+          image
+        };
+
+        if(typeMethod){
+          const response = await axios.post('http://localhost:5000/products/insert', jsonData , { withCredentials: true ,
+        headers: { 'Content-Type': 'application/json' }
+        })}
+        else
+        {
+          console.log(jsonData)
+          const response = await axios.post('http://localhost:5000/products/update', jsonData , { withCredentials: true ,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        setError(null); // Clear any previous error
+        navigate('/AdvanceSetting');
+      }
+    } 
+    catch (error) {
+      console.log(error)
+      setError(error.response?.data?.message || 'An error occurred');
     }
   };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -41,10 +101,14 @@ const FormProducts = ({product}) => {
     }
   };
 
+
+
+
+
   return (
     <div className='formproducts-container'>
         <h3>Update your Product</h3>
-       <form onSubmit={UpdateProductsSubmit}>
+       <form onSubmit={handelProductsSubmit}>
         <div className='formproducts-group-container'>
           <input type="text" value={serial} onChange={(e) => setSerial(e.target.value.trim())} placeholder='' required/>
           <label>Serial</label>
@@ -59,7 +123,11 @@ const FormProducts = ({product}) => {
         </div>
         <div className='formproducts-group-container'>
           <input type='text' value={description} onChange={(e) => setDescription(e.target.value.trim())} placeholder='' required/>
-          <label>description</label>
+          <label>Description</label>
+        </div>
+        <div className='formproducts-group-container'>
+          <input type='text' value={brand} onChange={(e) => setBrand(e.target.value.trim())} placeholder='' required/>
+          <label>Brand</label>
         </div>
         <div className={`formproducts-group-container named ${date ? 'filled': ''}`}>
           <input type='date' value={date.toString().split('T')[0]} onChange={(e) => setDate(e.target.value)} placeholder='' required/>
@@ -78,9 +146,10 @@ const FormProducts = ({product}) => {
           <input type='file' accept="image/*" onChange={handleFileChange} />
           <label>image</label>
         </div>
-      <button className='formproducts-button' type="submit">Update</button>
+      <button className='formproducts-button' type="submit">{product? 'Update' : 'Save'}</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
+
     <div className='formproducts-profile-container'>
         <div className='formproducts-profile-image'>
             {image ? (<img className='formproducts-image' src={image}/>) : (<label>No Found Image</label>)}
