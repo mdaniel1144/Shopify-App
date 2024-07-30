@@ -123,8 +123,8 @@ app.post('/products/insert', async (req, res) => {
 
     // Save the new product to the database
     await newProduct.save();
-
-    res.status(201).json(newProduct);
+    console.log(`-->Products:\n   Insert successful - add ${name}`)
+    res.status(201).send("Insert new Product");
   } catch (err) {
     console.error('-->Products:\n   Error inserting product:', err);
     res.status(500).send('An error occurred while inserting the product.');
@@ -152,6 +152,93 @@ app.delete('/products/delete/:_id', async (req, res) => {
   } catch (err) {
     console.error('-->Products:\n   Error deleting product:', err);
     res.status(500).send('An error occurred while deleting the product.');
+  }
+});
+
+
+app.post('/users/update', async (req, res) => {
+  try {
+    const {username, password, birthday, email,category , isActive , isAdmin} = req.body;
+
+    // Validate that all required fields are provided
+    if (!username) {
+      return res.status(400).json({ message: 'username is required' });
+    }
+
+    // Find and update the product
+    const updatedUser = await User.findOneAndUpdate(
+      { username: username },                                       // Query to find the product by serial
+      { password, birthday, email,category , isActive , isAdmin },  // Fields to update
+      { new: true }                                                 // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(updatedUser);
+
+  } catch (err) {
+    console.error('-->Users:\n   Error updating User:', err);
+    res.status(500).send('An error occurred while updating the Users.');
+  }
+});
+app.post('/users/insert', async (req, res) => {
+  try {
+    const {username, password, birthday, email,country , isActive = true , isAdmin = false} = req.body;
+
+    // Validate that all required fields are provided
+    if (!username || !password || !birthday || !email || country === 'none') {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Check if a user with the same username already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User is already exists' });
+    }
+
+    // Create a new user
+    const newUser = new User({
+      username,
+      password,
+      email,
+      birthday,
+      country,
+      isAdmin,
+      isActive,
+    });
+
+    // Save the new user to the database
+    await newUser.save();
+    console.log(`-->Users:\n   insert successful - add ${username}`)
+    res.status(201).send("Insert new user");
+  } catch (err) {
+    console.error('-->Users:\n   Error inserting User:', err);
+    res.status(500).send('An error occurred while inserting the User.');
+  }
+});
+app.delete('/users/delete/:_id', async (req, res) => {
+  try {
+    // Extract serial from URL parameters
+    const { _id } = req.params;
+
+    // Validate that the id is provided
+    if (!_id) {
+      return res.status(400).json({ message: 'user id is required' });
+    }
+
+    // Find and delete the User by serial
+    const deletedUser = await User.findOneAndDelete({_id });
+
+    // Check if the User was found and deleted
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User deleted successfully', deletedProduct });
+  } catch (err) {
+    console.error('-->Users:\n   Error deleting User:', err);
+    res.status(500).send('An error occurred while deleting the User.');
   }
 });
 

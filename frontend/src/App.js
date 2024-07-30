@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext, AuthProvider } from './component/AuthContext';
+import { CartProvider } from './component/CartContext';
 import { BrowserRouter as Router } from 'react-router-dom';
 import NavigationBar from './component/NavigationBar'
 import HomePage from './component/HomePage'
@@ -8,6 +9,7 @@ import './App.css';
 
 function App() {
   const { user } = useContext(AuthContext);
+
 
   useEffect(()=>{
     if (user)
@@ -27,7 +29,9 @@ function App() {
 
 const AppWithProvider = () => (
   <AuthProvider>
-    <App />
+    <CartProvider>
+      <App />
+    </CartProvider>
   </AuthProvider>
 );
 

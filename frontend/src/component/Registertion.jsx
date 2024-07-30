@@ -47,7 +47,14 @@ const Registertion = () => {
     event.preventDefault();
     try {
       if (validation()){
-        await axios.post('http://localhost:5000/registertion', { username, password , email , birthday , country }, { withCredentials: true });
+        const jsonData = {
+          username,
+          email,
+          password,
+          birthday,
+          country,
+        };
+        await axios.post('http://localhost:5000/users/insert', jsonData, { withCredentials: true });
         setError(null);
         navigate('/Login');
       }

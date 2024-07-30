@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './FormProducts.css'
 
-const FormProducts = ({product}) => {
+const FormProducts = ({product , typeMethod , setIsItem}) => {
 
-  const navigate = useNavigate();
-  const typeMethod = product === null
-  if (product === null)
-        product = {'serial' : '' , 'name' : '' , 'price' : 0 , 'brand' : '' , 'date': Date.now() ,'description':'' ,'category': 'none' , 'image' : ''}
-    
-  const [serial, setSerial] = useState(product.serial);
-  const [name, setName] = useState(product.name);
-  const [price, setPrice] = useState(product.price);
-  const [brand, setBrand] = useState(product.brand);
-  const [category, setCategory] = useState(product.category);
-  const [date, setDate] = useState(new Date(product.date).toISOString().split('T')[0]);
-  const [description, setDescription] = useState(product.description);
-  const [image, setImage] = useState(product.image);
-
+  
+  const [serial, setSerial] = useState(product?.serial || '');
+  const [name, setName] = useState(product?.name || '');
+  const [price, setPrice] = useState(product?.price || 0);
+  const [brand, setBrand] = useState(product?.brand || '');
+  const [category, setCategory] = useState(product?.category || 'none');
+  const [date, setDate] = useState(product?.date ? new Date(product.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+  const [description, setDescription] = useState(product?.description || '');
+  const [image, setImage] = useState(product?.image || '');
   const [error, setError] = useState(null);
 
 
@@ -66,6 +60,8 @@ const FormProducts = ({product}) => {
           image
         };
 
+        product = jsonData
+        
         if(typeMethod){
           const response = await axios.post('http://localhost:5000/products/insert', jsonData , { withCredentials: true ,
         headers: { 'Content-Type': 'application/json' }
@@ -78,7 +74,7 @@ const FormProducts = ({product}) => {
           });
         }
         setError(null); // Clear any previous error
-        navigate('/AdvanceSetting');
+        setIsItem(false)
       }
     } 
     catch (error) {
@@ -155,11 +151,12 @@ const FormProducts = ({product}) => {
             {image ? (<img className='formproducts-image' src={image}/>) : (<label>No Found Image</label>)}
         </div>
         <div className='formproducts-profile-details'>
-            <label>Serial Number: {serial}</label>
-            <label>Name: {name}</label>
-            <label>Category: {category}e</label>
-            <label>Price: {price}</label>
-            <label>Description: {description}</label>
+            <label><b>Serial Number: </b>{serial}</label>
+            <label><b>Name: </b>{name}</label>
+            <label><b>Category: </b>{category}e</label>
+            <label><b>Price: </b>{price}</label>
+            <label><b>Brand: </b>{brand}</label>
+            <label><b>Description: </b>{description}</label>
         </div>
     </div>
     </div>

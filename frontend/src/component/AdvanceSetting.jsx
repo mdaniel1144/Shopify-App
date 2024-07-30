@@ -1,9 +1,11 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import axios from 'axios';
 import { FaArrowLeft, FaPlus, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
 import FormUsers from './FormUsers';
 import FormProducts from './FormProducts';
+import Loading from './Loading'
 import './AdvanceSetting.css'
 
 const AdvanceSetting = ({user}) => {
@@ -12,11 +14,15 @@ const AdvanceSetting = ({user}) => {
   const navigate = useNavigate();
 
   const [listData , setListData] = useState([])
+  const [copyListItem , setCopyListItem] = useState(null)
+  const [isLoading , setIsLoading] = useState(true)
   const [modelSelected , setModelSelected] = useState(models[0])
   const [data , setData] = useState()
   const [isItem , setIsItem] = useState(false)
   const [question , setQuestion] = useState('')
   const [answer , setAnswer] = useState('')
+  const {search} = useContext(AuthContext)
+  const [typeMethod , setTypeMethod] = useState(true)  // true ==> New methed
   const [error , setError] = useState('')
 
   
@@ -24,6 +30,7 @@ const AdvanceSetting = ({user}) => {
   useEffect(()=>{
     const getAllData = async (question , answer) => {
       try {
+        setIsLoading(true)
         let url = `/${modelSelected.toLowerCase()}`;
         if (question && answer) {
           url += `?question=${question}&answer=${answer}`;
@@ -31,12 +38,15 @@ const AdvanceSetting = ({user}) => {
         const result = await axios.get(url);
         console.log(result)
         setListData(result.data)
+        setCopyListItem(result.data)
+        setIsLoading(false)
+        
       } catch (error) {
         console.error('There was an error fetching the data!', error);
       }
     };
      getAllData(question, answer)
-  } , [modelSelected])
+  } , [modelSelected, data])
 
 
   const GetStatics = async (event) => {
@@ -60,6 +70,17 @@ const AdvanceSetting = ({user}) => {
       setError('Failed to delete Item');
     }
   };
+
+  useEffect(()=>{
+    if(listData){
+      let newListItem
+      if(modelSelected === 'Products')
+        newListItem = listData.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+      else
+        newListItem = listData.filter(item => item.username.toLowerCase().includes(search.toLowerCase()))
+      setCopyListItem(newListItem)
+    }
+  }, [search])
   
   return (
     <div className='advanceSetting-container'>
@@ -82,35 +103,40 @@ const AdvanceSetting = ({user}) => {
             </tr>)
             : 
             (
-              <tr class='advanceSetting-command'><th><button className='advanceSetting-button-update' onClick={(e)=> {setIsItem(true) ; setData(null)}}><FaPlus  style={{ marginRight: '15px' }}/>Create New</button></th></tr>)
+              <tr class='advanceSetting-command'><th><button className='advanceSetting-button-update' onClick={(e)=> {setIsItem(true) ; ;setTypeMethod(true); setData(null)}}><FaPlus  style={{ marginRight: '15px' }}/>Create New</button></th></tr>)
             }
         </thead>
-        <tbody className='modellist-group-container'>
+        {!isLoading?
+         (        
+          <tbody className='modellist-group-container'>
           {modelSelected === 'Products' &&
           (
             <div className='modellist-group-container'>
-              {isItem? (<FormProducts product={data}/> )
-                :
+              {isItem? (<FormProducts product={data} typeMethod={typeMethod} setIsItem={setIsItem}/> )
+               :
                 (
-                  listData.map((product , index) => (
-                <tr key={index} className='modelitem-container' onClick={(e) => {setIsItem(!isItem); setData(product)}}>
-                  <td><label>Serial: {product.serial} - {product.name}</label></td>
-                </tr>))
+                 copyListItem.map((product , index) => (
+                  <tr key={index} className='modelitem-container' onClick={(e) => {setIsItem(!isItem); setData(product) ;setTypeMethod(false)}}>
+                    <td><label>Serial: {product.serial} - {product.name}</label></td>
+                  </tr>))
                 )}
             </div>)}
-            {modelSelected === 'Users' &&
-            (
-            <div className='modellist-container'>
-              {isItem? (<FormUsers user={data}/> )
-                :
-                (
-                listData.map((user , index) => (
-                <tr key={index} className='modelitem-container' onClick={(e) => {setIsItem(!isItem); setData(user)}}>
+          {modelSelected === 'Users' && (
+           <div className='modellist-container'>
+             {isItem? (<FormUsers user={data} typeMethod={typeMethod} setIsItem={setIsItem}/> )
+              :
+              (
+                copyListItem.map((user , index) => (
+                <tr key={index} className='modelitem-container' onClick={(e) => {setIsItem(!isItem); setData(user) ;setTypeMethod(false)}}>
                   <td><label>{user.username} , {user.email}</label></td>
                 </tr>))
-                )}
+              )}
             </div>)}
-        </tbody>
+          </tbody>)
+         :
+         (<Loading/>)
+        }
+
       </table>
     </div>
   );

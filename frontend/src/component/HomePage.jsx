@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from './AuthContext';
+import { useCart } from './CartContext';
 import { FaSearch ,FaShoppingCart } from 'react-icons/fa';
 import {Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom'
@@ -15,9 +16,10 @@ import './HomePage.css'
 
 const HomePage = ({user}) => {
 
-  const { logout } = useContext(AuthContext)
+  const {cart} = useCart()
+  const {logout , setSearch } = useContext(AuthContext)
   const [isOpenSearch , setIsopenSearch] = useState(false)
-  const [search , setSearch] = useState('')
+
 
   return (
     <div className='homepage-container'>
@@ -35,7 +37,7 @@ const HomePage = ({user}) => {
                 ` <Link to="/Cart">
                     <button>
                       <FaShoppingCart />
-                      <label id='counter-cart'>2</label>
+                      <label id='counter-cart'>{cart.totalItems}</label>
                     </button>
                   </Link>
                 </div>
@@ -44,6 +46,7 @@ const HomePage = ({user}) => {
                 <Logo />
             </div>
             <div class="navigation-top-search">
+                <span>Search</span>
                 <input className={`${isOpenSearch? 'open' : ''}`} onChange={(e)=>{setSearch(e.target.value.trim())}} type='text' placeholder="Type here.."></input>
                 <button onClick={(e)=>setIsopenSearch(!isOpenSearch)}> <FaSearch /></button>
             </div>

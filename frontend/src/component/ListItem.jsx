@@ -1,16 +1,19 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState , useEffect, useContext} from 'react';
+import { AuthContext } from './AuthContext';
 import axios from 'axios';
 import Item from './Item'
 import './ListItem.css'
 
-const ListItem = ({}) => {
+const ListItem = () => {
 
     const listcategory = ['Smartphone' , 'Computer' , 'Tablet' , 'Tv']
 
     const [listitem , setListItem] = useState(null)
+    const [copyListItem , setCopyListItem] = useState(null)
     const [chunkedList, setChunkedList] = useState([]);
     const [question , setQuestion] = useState('')
     const [answer , setAnswer] = useState('')
+    const {search} = useContext(AuthContext)
 
 
     const getAllProducts = async (question , answer) => {
@@ -21,6 +24,7 @@ const ListItem = ({}) => {
         }
         const result = await axios.get(url);
         setListItem(result.data)
+        setCopyListItem(result.data)
       } catch (error) {
         console.error('There was an error fetching the data!', error);
       }
@@ -40,10 +44,17 @@ const ListItem = ({}) => {
       } , [question , answer])
   
     useEffect(() => {
-        if (listitem) {
-          setChunkedList(chunkArray(listitem, 3));
+        if (copyListItem) {
+          setChunkedList(chunkArray(copyListItem, 3));
         }
-      }, [listitem]);
+      }, [copyListItem]);
+
+    useEffect(()=>{
+      if(listitem){
+        const newListItem = listitem.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+        setCopyListItem(newListItem)
+      }
+    }, [search])
 
   return (
     <div className='listitem-container'>
