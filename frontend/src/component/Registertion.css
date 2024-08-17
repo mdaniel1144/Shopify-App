@@ -1,8 +1,13 @@
 .registertion-container{
     display: block;
     position: relative;
+    top: 20px;
+    padding: 2px;
     width: 400px;
     margin: auto;
+    background-color: white;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
 }
 
 .registertion-group-container{
@@ -91,6 +96,7 @@
     height: 50px;
     padding: 5px;
     margin: auto;
+    margin-bottom: 10px;
     background-color: whitesmoke;
     box-shadow: 0 0 0 2px #007BFF;
     outline: none;

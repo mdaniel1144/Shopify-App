@@ -91,11 +91,11 @@ const FormUsers = ({user , typeMethod , setIsItem}) => {
        <form onSubmit={UpdateUsersSubmit}>
         <h3>Update your Users</h3>
         <div className='formuser-group-container'>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value.trim())} placeholder='' required />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='' required />
           <label>Username</label>
         </div>
         <div className='formuser-group-container'>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value.trim())} placeholder='' required/>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='' required/>
           <label>Email</label>
         </div>
         <div className={`formuser-group-container named ${birthday ? 'filled': ''}`}>
@@ -103,7 +103,7 @@ const FormUsers = ({user , typeMethod , setIsItem}) => {
           <label>Birthday</label>
         </div>
         <div className='formuser-group-container'>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value.trim())} placeholder='' required/>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='' required/>
           <label>Password</label>
         </div>
         <div className={`formuser-group-container named ${country !== 'none'? 'filled': ''}`}>

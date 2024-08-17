@@ -1,0 +1,22 @@
+
+.wellcome-container {
+    position: fixed;
+    font-family: 'Poppins', sans-serif;
+    background-color: #dfaa4eff;
+    background-image: linear-gradient(147deg, #fdaa4eff 25%, #fac07e 50%, #dfaa4eff 80%);
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    overflow: hidden;
+}
+
+
+
+.wellcome-container h1 {
+    font-size: 4em;
+}
+
+.wellcome-container main {
+    position: relative;
+    margin: auto;
+}

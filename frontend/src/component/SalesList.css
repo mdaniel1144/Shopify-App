@@ -1,0 +1,105 @@
+.salesList-container {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    z-index: 8;
+    background-color: whitesmoke;
+    box-shadow: 0 5px 5px rgba(140, 218, 230, 0.2);
+    animation-name: animatetop;
+    animation-duration: 0.7s;
+  }
+
+.salesList-container table{
+    display: block;
+    position: relative;
+    margin: auto;
+    padding: 10px;
+    width: max-content;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.salesList-container img{
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    width: fit-content;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.salesList-container label{
+    margin: 3px;
+}
+
+
+.salesList-container tbody{
+    display: block;
+    position: relative;
+    margin: auto;
+    text-align: center;
+}
+
+
+.salesList-command button{
+    display: inline-block;
+    position: absolute;
+    top:17px;
+    width: fit-content;
+    height: 30px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 0 4px 2px #767779;
+}
+
+.salesList-button-back{
+    position:absolute;
+    display: inline-block;
+    top: 2px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: none;
+    border: none;
+}
+
+.salesList-container h4{
+    margin: 4px;
+    text-align: start;
+}
+
+.salesList-close{
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 7;
+    top:0;
+    left:0;
+    background-color: rgba(94, 90, 90, 0.379);
+    opacity: 0.5;
+}
+
+
+
+
+/* Animation */
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}

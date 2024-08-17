@@ -16,19 +16,39 @@ const Setting = ({user}) => {
   const UpdateDetailsdSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/UpdateDetailsdSubmit', { username, password }, { withCredentials: true });
+      console.log(user)
+      const response = await axios.post('http://localhost:5000/users/update',
+      { id: user.id,
+        username,
+        email,
+        birthday,
+        country, }, { withCredentials: true });
       setError(null); // Clear any previous error
     } catch (error) {
-      setError('Invalid username or password');
+      setError(error.message);
     }
-  };
+  }
+
+
   const UpdatePasswordSubmit = async (event) => {
     event.preventDefault();
+  
+    if (password !== confirmPassword) {
+      setError('New passwords do not match.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:5000/api/UpdatePasswordSubmit', { username, password }, { withCredentials: true });
+      const response = await axios.post('http://localhost:5000/users/update_password', {
+        id: user.id,
+        oldPassword,
+        newPassword: password,
+      }, { withCredentials: true });
+  
       setError(null); // Clear any previous error
+      // Optionally handle successful response, e.g., show a success message
     } catch (error) {
-      setError('Invalid username or password');
+      setError(error.response?.data?.message || 'An unexpected error occurred.');
     }
   };
   
@@ -46,7 +66,7 @@ const Setting = ({user}) => {
             <form onSubmit={UpdateDetailsdSubmit}>
                 <h3>Praivcy details</h3>
                 <div className='setting-group-container'>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value.trim())} placeholder='' required />
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='' required />
                     <label>Username</label>
                 </div>
                 <div className='setting-group-container'>

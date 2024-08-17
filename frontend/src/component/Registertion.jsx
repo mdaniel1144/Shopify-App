@@ -74,19 +74,19 @@ const Registertion = () => {
       <h1>Registertion</h1>
       <form onSubmit={handelRegister}>
         <div className='registertion-group-container'>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value.trim())} placeholder=''  />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder=''  />
           <label>Username</label>
         </div>
         <div className='registertion-group-container'>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value.trim())} placeholder=''/>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder=''/>
           <label>Password</label>
         </div>
         <div className='registertion-group-container'>
-          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value.trim())} placeholder=''/>
+          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder=''/>
           <label>Confirm Password</label>
         </div>
         <div className='registertion-group-container'>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value.trim())} placeholder='' />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='' />
           <label>Email</label>
         </div>
         <div className={`registertion-group-container named ${birthday !== null? 'filled': ''}`}>

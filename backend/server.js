@@ -2,13 +2,16 @@ const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcryptjs'); 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const { connectDB } = require('./config/mongoDB');
 const User = require('./models/User');
 const Product = require('./models/Product');
+const Sales = require('./models/Sales');
 
 
+console.log(PORT)
 
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -48,21 +51,25 @@ app.get('/HelloWorld', (req, res) => {
 // Create a route to get all users
 app.get('/products', async (req, res) => {
   try {
-      const question = req.query.question
-      const answer = req.query.answer
+    const { ids, category, brand } = req.query;
 
-      let query = {};
-      let products;
+    let query = {};
 
-      if (question && answer) {
-        query[question] = answer.toLowerCase();
-        products = await Product.find(query);
-      }
-      else {
-        products = await Product.find()
-      }
-      res.status(200).json(products)
+    if (ids) {
+      const idsArray = ids.split(',').map(id => id.trim());
+      query._id = { $in: idsArray };
     }
+
+    if (category) {
+      query.category = category.toLowerCase();
+    }
+
+    if (brand) {
+      query.brand = brand.toLowerCase(); 
+    }
+    const products = await Product.find(query);
+    res.status(200).json(products);
+  }
     catch (err) {
       console.error('-->Products:\n   Error fetching products:', err)
      res.status(500).send('An error occurred while fetching products.')
@@ -159,19 +166,37 @@ app.delete('/products/delete/:_id', async (req, res) => {
 
 app.post('/users/update', async (req, res) => {
   try {
-    const {username, password, birthday, email,category , isActive , isAdmin} = req.body;
+    const {id , username, password, birthday, email,category , isActive , isAdmin} = req.body;
 
     // Validate that all required fields are provided
-    if (!username) {
+    if (!id) {
       return res.status(400).json({ message: 'username is required' });
+    }
+    // Find the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the new username is already taken (excluding the current user)
+    if (username && username !== user.username) {
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+          return res.status(400).json({ message: 'Username is already taken' });
+        }
+    }
+
+    const updateFields = { username, birthday, email, category, isActive, isAdmin };
+    if (password) {
+      updateFields.password = await bcrypt.hash(password, 10);       // Hash the new password if provided
     }
 
     // Find and update the product
-    const updatedUser = await User.findOneAndUpdate(
-      { username: username },                                       // Query to find the product by serial
-      { password, birthday, email,category , isActive , isAdmin },  // Fields to update
-      { new: true }                                                 // Return the updated document
-    );
+    const updatedUser = await User.findByIdAndUpdate(
+      id,                 // Query to find the product by serial
+      updateFields,       // Fields to update
+      { new: true }       // Return the updated document
+    )
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -182,7 +207,42 @@ app.post('/users/update', async (req, res) => {
     console.error('-->Users:\n   Error updating User:', err);
     res.status(500).send('An error occurred while updating the Users.');
   }
-});
+})
+app.post('/users/update_password', async (req, res) => {
+  try {
+    const { id, oldPassword, newPassword } = req.body;
+
+    // Validate required fields
+    if (!id || !oldPassword || !newPassword) {
+      return res.status(400).json({ message: 'ID, old password, and new password are required' });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Verify the old password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Old password is incorrect' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+
+  } catch (err) {
+    console.error('-->Users:\n   Error updating password:', err);
+    res.status(500).send('An error occurred while updating the password.');
+  }
+})
 app.post('/users/insert', async (req, res) => {
   try {
     const {username, password, birthday, email,country , isActive = true , isAdmin = false} = req.body;
@@ -198,10 +258,12 @@ app.post('/users/insert', async (req, res) => {
       return res.status(400).json({ message: 'User is already exists' });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     // Create a new user
     const newUser = new User({
       username,
-      password,
+      password: hashedPassword,
       email,
       birthday,
       country,
@@ -267,13 +329,29 @@ app.get('/users', async (req, res) => {
   }
 })
 
+//--------------------- Sales ------------------------
+app.get('/sales', async (req, res) => {
+  try {
+    const { userID } = req.query;
 
+    if (!userID) {
+      return res.status(400).send('userID query parameter is required.');
+    }
+
+    const sales = await Sales.find({ userID });
+
+    res.status(200).json(sales);
+  } catch (err) {
+    console.error('-->Sales:\n   Error fetching sales by userID:', err);
+    res.status(500).send('An error occurred while fetching sales.');
+  }
+});
 
 
 app.post('/session' , async (req, res) => {
   if (req.session.user) {
     console.log(`-->Login:\n   Exist Session: ${username}`)
-    req.session.user = { username: user.username , email : 'daniel@n-k.org.il' , country : 'usa' , birthday: Date.now() , 'isAdmin' : true};
+    req.session.user = { id: user.id ,username: user.username , email : 'daniel@n-k.org.il' , country : 'usa' , birthday: Date.now() , 'isAdmin' : true};
     res.status(200).json({ user: req.session.user })
   } else {
     res.status(401).send('Please login first');
@@ -285,31 +363,38 @@ app.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    // Find user by username
     const user = await User.findOne({ username }).exec();
-    //const user = users.find(u => u.username === username && u.password === password && u.isActive)
     if (!user) {
       return res.status(401).send('Username or Password is Invalid');
     }
-    if(user.password === password && user.isActive){
-      console.log(`-->Login:\n   Trying..\n   username:${username} Connected`)
+
+    // Compare provided password with the hashed password in the database
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (isMatch && user.isActive) {
+      console.log(`-->Login:\n   Trying..\n   username:${username} Connected`);
+      
+      // Store user session data
       req.session.user = {
-          username: user.username,
-          email: user.email,
-          country: user.country,
-          birthday: user.birthday,
-          isAdmin: user.isAdmin
-        };
-      res.status(200).json({ user: req.session.user })
-    }
-    else{
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        country: user.country,
+        birthday: user.birthday,
+        isAdmin: user.isAdmin
+      };
+
+      res.status(200).json({ user: req.session.user });
+    } else {
       return res.status(401).send('Username or Password is Invalid');
     }
 
-  } 
-  catch (err) {
-    res.status(500).send('A server error occurred. Please try again later.')
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).send('A server error occurred. Please try again later.');
   }
-})
+});
 
 
  
@@ -325,28 +410,48 @@ app.get('/logout', (req, res) => {
 })
 
 
-app.post('/registertion', (req, res) => {
+app.post('/payment', async (req, res) => {
+
+  const { userId, cart , isracard } = req.body;
+
   try {
-    const { username, password, email, birthday, country } = req.body;
-    const user = users.find(u => u.username === username)
-    if(!user){
-      // Add user to dummy database
-      users.push({
-        username,
-        password,
-        email,
-        birthday,
-        country,
-        isActive: true,
-        isAdmin: false
-      })
-      console.log(`-->Registerion:\n   Registration successful - add ${username}`)
-      res.status(200).send('Registration successful.');
+    if(isracard)
+      console.log('-->Conncted to Isracard Service API..')
+    else
+      throw new Error('Isracard is not accepted')
+    // Loop through each item in the cart
+    for (let item of cart.items) {
+      const result = await Product.updateOne(
+        { _id: item.product._id, count: { $gte: item.count } }, // Ensure enough stock exists
+        { $inc: { count: -item.count } }                        // Decrement the count
+      );
+
+      // Check if the update was successful
+      if (result.matchedCount === 0) {
+        throw new Error(`Not enough stock for product ID ${item.product._id} or product not found`);
+      }
     }
-    else{
-      res.status(400).send("User is allready exist")
-    }
+
+
+    // Create a new Sale document
+    const newSale = new Sales({
+      userID: userId,
+      products: cart.items.map(item => ({
+        itemID: item.product._id,
+        count: item.count,
+      })),
+      totalItems: cart.totalItems,
+      totalPrice: cart.totalPrice,
+      dateStart: new Date(), // Current date and time
+      dateEnd: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000), // 30 days after dateStart    
+      status: 'Progress', // Mark as in progress, change to "Paid" when payment is confirmed
+    });
+
+    await newSale.save();
+    console.log(`-->UserID: ${userId} \nPayment successful and sale recorded`);
+    res.status(200).json({ message: 'Payment successful and sale recorded' });
   } catch (error) {
-    res.status(500).send('An error occurred during registration.');
+    console.log(error)
+    res.status(500).json({ error: error.message });
   }
 });

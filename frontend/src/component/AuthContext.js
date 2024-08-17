@@ -7,11 +7,24 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [search , setSearch] = useState('')
 
+
+  const setCookie = (name, value, days) => {
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + days);
+    document.cookie = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
+  }
+  //const getCookie = (name) => {
+  //  const cookies = document.cookie.split("; ").find((row) => row.startsWith(`${name}=`));
+  //  return cookies ? cookies.split("=")[1] : null;
+  //}
+  //const username = getCookie("username");
+
   useEffect(() => {
     const checkSession = async () => {
       try {
         const response = await axios.post('http://localhost:5000/session', { withCredentials: true });
         setUser(response.data.user);
+        //const username = getCookie("username");
       } catch (error) {
         if (error.response && error.response.status === 401) {
           console.log(error.response.data);
@@ -27,6 +40,7 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('http://localhost:5000/login', { username, password }, { withCredentials: true });
       setUser(response.data.user);
+      setCookie("username", user.username, 7);
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 500))   {
         throw new Error(error.response.data);

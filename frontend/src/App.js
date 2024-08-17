@@ -15,7 +15,6 @@ function App() {
     if (user)
       console.log(user.username + " Connected")
   } , [user])
-  //const user_1 = {'username' : 'daniel' , 'email' : 'daniel@n-k.org.il' , 'country' : 'usa' , 'birthday': Date.now()}
 
   return (
     <Router>

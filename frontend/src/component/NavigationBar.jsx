@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './NavigationBar.css'
-import { FaChevronRight, FaTimes , FaTags, FaSearch, FaCog , FaSlidersH } from 'react-icons/fa'; // Import icons from react-icons
+import { FaChevronRight, FaTimes , FaTags, FaCog , FaSlidersH } from 'react-icons/fa'; // Import icons from react-icons
 import { Link } from 'react-router-dom'
 import Logo from './Logo';
 
@@ -28,18 +28,14 @@ const NavigationBar = ({user}) => {
             <li>
               <Link to="/ListItem"> 
                 <FaTags className='navigation-menu-icon'/>
-                <label>Category</label>
+                <label>Make Shoping</label>
               </Link>
             </li>
             <li>
-              <Link to="/Registertion">
-                <FaSearch className='navigation-menu-icon'/>
-                <label>Advance Search</label>
-              </Link>
-            </li>
-            <li>
+              <Link to="/Sales" >
               <FaCog className='navigation-menu-icon'/>
               <label>My sales</label>
+              </Link>
             </li>           
              <li>
              <Link to="/Setting" >

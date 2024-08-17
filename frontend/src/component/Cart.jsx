@@ -1,14 +1,18 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState , useEffect , useContext} from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaTimes, FaArrowLeft} from 'react-icons/fa';
+import { FaTimes} from 'react-icons/fa';
+import { AuthContext} from './AuthContext';
 import { useCart } from './CartContext';
 import './Cart.css'
 
-const Cart = ({}) => {
+const Cart = () => {
 
-    const {cart , changeItem , removeItem} = useCart()
-    const [tax , setTax] = useState(0.17)
-    const [error, setError] = useState(null);
+    const { user } = useContext(AuthContext)
+    const {cart , changeItem , removeItem , clearCart} = useCart()
+    const [tax] = useState(0.17)
+    const navigate = useNavigate()
+    
 
 
     const handleChangeCountItem = (item, num) => {
@@ -21,27 +25,32 @@ const Cart = ({}) => {
     const handleRemoveItem = (item) => {
         // Add a class to the row with the given index
         const removeItemId = item.product._id
-        const element = document.querySelector(`.modelitem-container[data-index="${item.product.serial}"]`);
+        const element = document.querySelector(`.modelitem-container[data-index="${removeItemId}"]`);
         //console.log(element)
         if (element) {
           element.classList.add('cart-removeItem');
-        //    element.style.backgroundColor = 'lightblue';
-        //setTimeout(() => {
-       //     removeItem(removeItemId);
-        //}, 350); // Wait for the highlight to be visible before removing
+            element.style.backgroundColor = 'lightblue';
+        setTimeout(() => {
+            removeItem(removeItemId);
+        }, 350); // Wait for the highlight to be visible before removing
         }
     };
 
 
-    const handelPay = async (event) => {
-    event.preventDefault();
+    const handelPay = async () => {
         try {
-        const response = await axios.post('http://localhost:5000/Payment', {cart}, { withCredentials: true });
-        setError(null); // Clear any previous error
-        }   catch (error) {
-        setError('Payment Not Succses');
+            console.log(user)
+            await axios.post('/payment', {
+                userId: user.id,
+                cart: cart,
+                isracard: 'd', // the cart object from the state
+            });
+            clearCart()
+            navigate('/');
+        } catch (error) {
+            console.error('Payment failed:', error);
         }
-    };
+    }
 
     useEffect(()=>{console.log(cart)},[cart])
   
@@ -66,9 +75,9 @@ const Cart = ({}) => {
                         <th>Total Price</th>
                     </tr>
                         {cart.items.map((item , index) => (
-                        <tr key={index} data-index={item.product.serial} className='modelitem-container'>
+                        <tr key={index} data-index={item.product._id} className='modelitem-container'>
                         <td>
-                            <img src={item.product.image}/>
+                            <img src={item.product.image} alt=''/>
                         </td>
                         <td width='200px'>
                                 <span>

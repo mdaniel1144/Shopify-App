@@ -1,0 +1,96 @@
+.sales-container{
+    display: block;
+    position: relative;
+    margin: auto;
+}
+
+
+.sales-model-container{
+    display: inline-block;
+    position: relative;
+    width: 20%;
+    top: 70px;
+    left: 0;
+    margin: 15px;
+    padding: 10px;
+    vertical-align: top;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.sales-model-container li{
+    display: block;
+    position: relative;
+    left: -30px;
+    margin: 5px;
+    padding: 5px;
+    width: fit-content;
+    max-width: 200px;
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: font-size,width,border-bottom-color,color 0.7s ease;
+}
+
+.sales-container table{
+    display: inline-block;
+    position: relative;
+    width: 70%;
+    top: 20px;
+    margin: auto;
+    padding: 10px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+
+.sales-container tbody{
+    display: block;
+    position: relative;
+    margin: auto;
+    box-shadow: 0 0 4px 2px #767779;
+    text-align: center;
+    align-items: center;
+}
+
+.sales-container td{
+    margin: 5px;
+    width: 25%;
+    text-align: center;
+}
+
+.sales-button-back{
+    left: 0;
+}
+
+.sales-button-update{
+    right: 0px;
+}
+
+.sales-status{
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.sales-status{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 2px;
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.Progress{
+    background-color: orange;
+}
+.Completed{
+    background-color: greenyellow;
+}
+.Cancelled{
+    background-color: red;
+}

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-  id: {type: String, required: false},
+  _id: {type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId()},
   serial: { type: String, required: true },     // Serial number of the product, required field
   name: { type: String, required: true },       // Name of the product, required field
   price: { type: Number, required: true },      // Price of the product, required field (Number type)

@@ -6,11 +6,13 @@ import {Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Logo  from './Logo';
 import ListItem from './ListItem'
+import Sales from './Sales';
 import Login from './Login';
 import Registertion from './Registertion'
 import Setting from './Setting';
 import Page404 from './Page404';
 import AdvanceSetting from './AdvanceSetting'
+import Wellcome from './Wellcome';
 import Cart from './Cart'
 import './HomePage.css'
 
@@ -54,9 +56,11 @@ const HomePage = ({user}) => {
         </div>
         <div className="App-content">
           <Routes>
-            <Route path="/" element={<ListItem />}/>
+            <Route path="/" element={<Wellcome />}/>
+            <Route path="/ListItem" element={<ListItem />}/>
             <Route path="/login" element={<Login />} />
             <Route path="/Cart" element={<Cart />} />
+            <Route path="/Sales" element={<Sales user={user}/>} />
             <Route path="/Registertion" element={<Registertion />} />
             <Route path="/Setting" element={<Setting  user={user}/>} />
             <Route path="/AdvanceSetting" element={<AdvanceSetting  user={user}/>} />

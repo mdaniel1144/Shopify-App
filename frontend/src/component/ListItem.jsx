@@ -14,18 +14,15 @@ const ListItem = () => {
   const [listitem , setListItem] = useState(null)
   const [copyListItem , setCopyListItem] = useState(null)
   const [chunkedList, setChunkedList] = useState([]);
-  const [question , setQuestion] = useState('')
-  const [answer , setAnswer] = useState('')
-  const [priceRange , setPriceRange] = useState({'min' : 0 , 'max': 2000}) 
+  const [category , setCategory] = useState('')
+  const [brand , setBrand] = useState('')
+  const [priceRange , setPriceRange] = useState({'min' : 0 , 'max': 5000}) 
   const {search} = useContext(AuthContext)
 
 
-  const getAllProducts = async (question , answer) => {
+  const getAllProducts = async () => {
     try {
-      let url = '/products';
-      if (question && answer) {
-        url += `?question=${question}&answer=${answer}`;
-      }
+      let url = '/products'+ `?category=${category}&brand=${brand}`;
       const result = await axios.get(url);
       setListItem(result.data)
       setCopyListItem(result.data)
@@ -34,16 +31,6 @@ const ListItem = () => {
       console.error('There was an error fetching the data!', error);
     }
   };
-
-  const handelChangePrice = (event) => {
-      const value = parseInt(event.target.value, 10);
-      setPriceRange({'min' : 0 , 'max': value});
-      console.log(priceRange)
-      // Filter items based on price
-      const filteredItems = listitem.filter(item => item.price <= priceRange.max && item.price >= priceRange.min);
-      setCopyListItem(filteredItems);
-    }
-
 
     const chunkArray = (arr, chunkSize) => {
         const chunks = [];
@@ -55,14 +42,20 @@ const ListItem = () => {
 
 
     useEffect(()=>{
-        getAllProducts(question , answer)
-      } , [question , answer])
+        getAllProducts()
+      } , [category , brand])
   
     useEffect(() => {
         if (copyListItem) {
           setChunkedList(chunkArray(copyListItem, 2));
         }
       }, [copyListItem]);
+
+      useEffect(() => {
+        if (listitem){
+          const filteredItems = listitem.filter(item => item.price <= priceRange.max && item.price >= priceRange.min);
+          setCopyListItem(filteredItems)}
+      }, [priceRange]);
 
     useEffect(()=>{
       if(listitem){
@@ -77,12 +70,12 @@ const ListItem = () => {
             <label>Category</label>
             <ul className='listitem-category'>
                 {listcategory.map((category,index) => (
-                    <li key={index} onClick={(e)=> {setQuestion('category'); setAnswer(category)}}><img src='' alt=''/>{category}</li>
+                    <li key={index} onClick={(e)=> {setCategory(category)}}><img src='' alt=''/>{category}</li>
                 ))}
             </ul>
             <div className='listitem-price'>
               <label>Price</label>
-                <RangePrice min={0}  max={5000}  gap= {50}/>
+                <RangePrice min={0}  max={5000}  gap= {50} setPriceRange={setPriceRange}/>
             </div>
         </div>
         <table className='listitem-table-container'>

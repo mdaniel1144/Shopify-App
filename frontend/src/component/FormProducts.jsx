@@ -111,27 +111,27 @@ const FormProducts = ({product , typeMethod , setIsItem}) => {
         <h3>Update your Product</h3>
        <form onSubmit={handelProductsSubmit}>
         <div className='formproducts-group-container'>
-          <input type="text" value={serial} onChange={(e) => setSerial(e.target.value.trim())} placeholder='' required/>
+          <input type="text" value={serial} onChange={(e) => setSerial(e.target.ariaValueMax)} placeholder='' required/>
           <label>Serial</label>
         </div>
         <div className='formproducts-group-container'>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value.trim())} placeholder='' required />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder='' required />
           <label>name</label>
         </div>
         <div className='formproducts-group-container'>
-          <input type="number" value={price} onChange={(e) => setPrice(e.target.value.trim())} placeholder='' required/>
+          <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder='' required/>
           <label>Price</label>
         </div>
         <div className='formproducts-group-container'>
-          <input type="number" value={count} onChange={(e) => setCount(e.target.value.trim())} placeholder='' required/>
+          <input type="number" value={count} onChange={(e) => setCount(e.target.value)} placeholder='' required/>
           <label>Count</label>
         </div>
         <div className='formproducts-group-container'>
-          <input type='text' value={description} onChange={(e) => setDescription(e.target.value.trim())} placeholder='' required/>
+          <input type='text' value={description} onChange={(e) => setDescription(e.target.value)} placeholder='' required/>
           <label>Description</label>
         </div>
         <div className='formproducts-group-container'>
-          <input type='text' value={brand} onChange={(e) => setBrand(e.target.value.trim())} placeholder='' required/>
+          <input type='text' value={brand} onChange={(e) => setBrand(e.target.value)} placeholder='' required/>
           <label>Brand</label>
         </div>
         <div className={`formproducts-group-container named ${date ? 'filled': ''}`}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RangePrice.css';
 
-const RangePrice = ({min , max , gap}) => {
+const RangePrice = ({min , max , gap , setPriceRange}) => {
     const [showMinTooltip, setShowMinTooltip] = useState(false);
     const [showMaxTooltip, setShowMaxTooltip] = useState(false);
     const [minPrice, setMinPrice] = useState(0);
@@ -12,6 +12,7 @@ const RangePrice = ({min , max , gap}) => {
         if (maxPrice - minPrice < priceGap) {
             setMaxPrice(minPrice + priceGap);
         }
+        setPriceRange({min: minPrice , max: maxPrice})
     }, [minPrice, maxPrice]);
 
   const handleMinPriceChange = (e) => {
