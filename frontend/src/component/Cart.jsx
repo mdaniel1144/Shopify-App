@@ -20,14 +20,16 @@ const Cart = ({}) => {
 
     const handleRemoveItem = (item) => {
         // Add a class to the row with the given index
-        //const element = document.querySelector(`.modelitem-container[data-index="${item.product.serial}"]`);
+        const removeItemId = item.product._id
+        const element = document.querySelector(`.modelitem-container[data-index="${item.product.serial}"]`);
         //console.log(element)
-        //if (element) {
-        //    element.classList.add('cart-removeItem');
-        //    setTimeout(() => {
-                removeItem(item.product._id);
-        //    }, 8000); // Wait for the highlight to be visible before removing
-       // }
+        if (element) {
+          element.classList.add('cart-removeItem');
+        //    element.style.backgroundColor = 'lightblue';
+        //setTimeout(() => {
+       //     removeItem(removeItemId);
+        //}, 350); // Wait for the highlight to be visible before removing
+        }
     };
 
 

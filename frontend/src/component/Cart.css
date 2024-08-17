@@ -92,7 +92,7 @@
     padding: 3px;
     border-bottom: 1px solid black;
     opacity: 1;
-    transition: opacity 0.3s ease-out, transform 0.5s ease-out; /* Adjust the duration and timing function as needed */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Adjust the duration and timing function as needed */
 }
 
 .modelitem-container span label{

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
+import ItemMore from './ItemMore';
 import './Item.css';
 
 const Item = ({ item }) => {
     const [isAdded, setIsAdded] = useState(false);
+    const [isItemMore , setIsItemMore] = useState(false)
     const [count, setCount] = useState(0);
-    const { addItem, removeItem, changeItem } = useCart();
+    const {addItem, removeItem, changeItem } = useCart();
 
     const handleChange = (num) => {
         setCount(prevCount => {
@@ -38,26 +40,27 @@ const Item = ({ item }) => {
     }, [item]);
 
     return (
-        <div className='Item-container'>
+        <div className='Item-container' onClick={(e)=> setIsItemMore(true)}>
             <div className='Item-image-container'>
                 <img src={item.image ? item.image : './images/logo.png'} alt={item.name} />
             </div>
             <div className='Item-details-container'>
+                {item.count === 0 && (<div className='Item-soldout'>Sold Out</div>)}
                 <table>
                     <tbody>
                         <tr>
-                            <td><label>Name</label></td>
+                            <td><label><b>Name</b></label></td>
                             <td>{item.name}</td>
                         </tr>
                         <tr>
-                            <td><label>Price</label></td>
+                            <td><label><b>Price</b></label></td>
                             <td>{item.price}</td>
                         </tr>
                         <tr>
-                            <td><label>Brand</label></td>
+                            <td><label><b>Brand</b></label></td>
                             <td>{item.brand}</td>
                         </tr>
-                        <tr>
+                        {item.count > 0 && ( <tr>
                             <td colSpan={2}>
                                 <button className='Item-button' onClick={() => handleChange(1)}>+</button>
                                 <label className='Item-sum'>{count}</label>
@@ -67,7 +70,7 @@ const Item = ({ item }) => {
                                     (<button id="Item-cart-add" className='Item-button' onClick={handleInsertItems}>Add</button>)
                                 }
                             </td>
-                        </tr>
+                        </tr>)}
                     </tbody>
                 </table>
             </div>

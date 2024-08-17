@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
 import './Login.css'
@@ -6,6 +7,7 @@ import './Login.css'
 const Login = () => {
 
   const {login} = useContext(AuthContext)
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +19,7 @@ const Login = () => {
     try {
       await login(username , password)
       setError(null); // Clear any previous error
+      navigate('/')
     } catch (error) {
       console.log(error)
       setError(error.message || 'An unexpected error occurred');

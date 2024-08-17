@@ -96,10 +96,10 @@ app.post('/products/update', async (req, res) => {
 });
 app.post('/products/insert', async (req, res) => {
   try {
-    const {serial, name, price, brand, date, description, category , image} = req.body;
+    const {serial, name, price,count, brand, date, description, category , image} = req.body;
 
     // Validate that all required fields are provided
-    if (!serial || !name || !price || !brand || !date || !description || category === 'none') {
+    if (!serial || !name || !price || !count || !brand || !date || !description || category === 'none') {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -116,6 +116,7 @@ app.post('/products/insert', async (req, res) => {
       price,
       brand,
       date,
+      count,
       description,
       category,
       image

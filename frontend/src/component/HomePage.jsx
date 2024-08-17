@@ -33,14 +33,15 @@ const HomePage = ({user}) => {
                   <Link to="/Registertion"><button>SignIn</button></Link>
                 </div>)
               }
+              {cart.items.length > 0 && (
                 <div className='homepage-cart-container'>
-                ` <Link to="/Cart">
+                  <Link to="/Cart">
                     <button>
                       <FaShoppingCart />
                       <label id='counter-cart'>{cart.totalItems}</label>
                     </button>
                   </Link>
-                </div>
+                </div>)}
             </div>
             <div class="navigation-top-title">
                 <Logo />

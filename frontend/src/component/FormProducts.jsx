@@ -8,6 +8,7 @@ const FormProducts = ({product , typeMethod , setIsItem}) => {
   const [serial, setSerial] = useState(product?.serial || '');
   const [name, setName] = useState(product?.name || '');
   const [price, setPrice] = useState(product?.price || 0);
+  const [count, setCount] = useState(product?.count || 0);
   const [brand, setBrand] = useState(product?.brand || '');
   const [category, setCategory] = useState(product?.category || 'none');
   const [date, setDate] = useState(product?.date ? new Date(product.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
@@ -23,6 +24,9 @@ const FormProducts = ({product , typeMethod , setIsItem}) => {
       isValid = false;
     } else if (isNaN(price) || price <= 0)  {
       setError("Price must be a positive number");
+      isValid = false;
+    } else if (isNaN(count) || count <= 0)  {
+      setError("Count must be a positive number");
       isValid = false;
     } else if (serial.length < 1 || serial.length > 100) {
       setError("serial must be in range 1-150");
@@ -55,6 +59,7 @@ const FormProducts = ({product , typeMethod , setIsItem}) => {
           price,
           brand,
           date,
+          count,
           description,
           category,
           image
@@ -118,6 +123,10 @@ const FormProducts = ({product , typeMethod , setIsItem}) => {
           <label>Price</label>
         </div>
         <div className='formproducts-group-container'>
+          <input type="number" value={count} onChange={(e) => setCount(e.target.value.trim())} placeholder='' required/>
+          <label>Count</label>
+        </div>
+        <div className='formproducts-group-container'>
           <input type='text' value={description} onChange={(e) => setDescription(e.target.value.trim())} placeholder='' required/>
           <label>Description</label>
         </div>
@@ -155,6 +164,7 @@ const FormProducts = ({product , typeMethod , setIsItem}) => {
             <label><b>Name: </b>{name}</label>
             <label><b>Category: </b>{category}e</label>
             <label><b>Price: </b>{price}</label>
+            <label><b>Count: </b>{count}</label>
             <label><b>Brand: </b>{brand}</label>
             <label><b>Description: </b>{description}</label>
         </div>

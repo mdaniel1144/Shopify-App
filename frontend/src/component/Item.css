@@ -89,3 +89,14 @@
     border-radius: 10px;
     left: 40px;
 }
+
+.Item-soldout{
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    color: red;
+    z-index: 3;
+    text-decoration: underline;
+    transform: rotate(30deg);
+}

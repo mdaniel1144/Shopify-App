@@ -11,13 +11,13 @@ const initCart = {
     switch (action.type) {
       case 'ADD_ITEM': {
         const updatedItems = [...state.items, action.item];
-        const totalItems = updatedItems.length;
+        const totalItems = updatedItems.reduce((sum, item) => sum + item.count, 0);
         const totalPrice = updatedItems.reduce((sum, item) => sum + item.product.price*item.count, 0); 
         return { items: updatedItems, totalItems, totalPrice }
       }
       case 'REMOVE_ITEM': {
         const updatedItems = state.items.filter(item => item.product._id !== action.id);
-        const totalItems = updatedItems.length;
+        const totalItems = updatedItems.reduce((sum, item) => sum + item.count, 0);
         const totalPrice = updatedItems.reduce((sum, item) => sum + item.product.price*item.count, 0);
   
         return {  items: updatedItems,  totalItems, totalPrice }
