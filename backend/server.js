@@ -361,19 +361,19 @@ app.post('/session' , async (req, res) => {
 
 app.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.body
 
     // Find user by username
-    const user = await User.findOne({ username }).exec();
+    const user = await User.findOne({ username }).exec()
     if (!user) {
-      return res.status(401).send('Username or Password is Invalid');
+      return res.status(401).send('Username or Password is Invalid')
     }
 
     // Compare provided password with the hashed password in the database
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password)
 
     if (isMatch && user.isActive) {
-      console.log(`-->Login:\n   Trying..\n   username:${username} Connected`);
+      console.log(`-->Login:\n   Trying..\n   username:${username} Connected`)
       
       // Store user session data
       req.session.user = {
@@ -383,18 +383,18 @@ app.post('/login', async (req, res) => {
         country: user.country,
         birthday: user.birthday,
         isAdmin: user.isAdmin
-      };
+      }
 
-      res.status(200).json({ user: req.session.user });
+      res.status(200).json({ user: req.session.user })
     } else {
-      return res.status(401).send('Username or Password is Invalid');
+      return res.status(401).send('Username or Password is Invalid')
     }
 
   } catch (err) {
-    console.error('Error during login:', err);
+    console.error('Error during login:', err)
     res.status(500).send('A server error occurred. Please try again later.');
   }
-});
+})
 
 
  

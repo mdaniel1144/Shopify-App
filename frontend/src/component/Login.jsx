@@ -17,10 +17,9 @@ const Login = () => {
     event.preventDefault();
     try {
       await login(username , password)
-      setError(null); // Clear any previous error
+      setError(''); // Clear any previous error
       navigate('/')
     } catch (error) {
-      console.log(error)
       setError(error.message || 'An unexpected error occurred');
     }
   };
