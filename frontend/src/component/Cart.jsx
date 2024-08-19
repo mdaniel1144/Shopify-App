@@ -4,17 +4,16 @@ import axios from 'axios';
 import { FaTimes} from 'react-icons/fa';
 import { AuthContext} from './AuthContext';
 import { useCart } from './CartContext';
+import Payment from './Payment'
 import './Cart.css'
 
 const Cart = () => {
 
     const { user } = useContext(AuthContext)
-    const {cart , changeItem , removeItem , clearCart} = useCart()
+    const [isPayment , setIsPayment] = useState(false)
+    const {cart , changeItem , removeItem } = useCart()
     const [tax] = useState(0.17)
-    const navigate = useNavigate()
     
-
-
     const handleChangeCountItem = (item, num) => {
         const newCount = item.count + num;
         if (newCount >= 0 && newCount <= 10 && newCount <= item.product.count) {
@@ -37,24 +36,11 @@ const Cart = () => {
     };
 
 
-    const handelPay = async () => {
-        try {
-            console.log(user)
-            await axios.post('/payment', {
-                userId: user.id,
-                cart: cart,
-                isracard: 'd', // the cart object from the state
-            });
-            clearCart()
-            navigate('/');
-        } catch (error) {
-            console.error('Payment failed:', error);
-        }
-    }
-
     useEffect(()=>{console.log(cart)},[cart])
   
     return (
+        <section>
+            {isPayment && (<Payment setIsPayment={setIsPayment}/>)}
         <div className='cart-container'>
             <div className='cart-model-container'>
                 <h1>Payment</h1>
@@ -63,7 +49,7 @@ const Cart = () => {
                     <li><label>Tax: </label>{(cart.totalPrice*tax).toFixed(2)}</li>
                     <li><label>Total Price: </label>{(cart.totalPrice*tax + cart.totalPrice).toFixed(2)}</li>
                 </ul>
-                <button class='cart-payment' onClick={(e)=>handelPay()}>Pay Now</button>
+                <button class='cart-payment' onClick={(e)=>setIsPayment(true)}>Pay Now</button>
             </div>
             <table>
                 <thead>
@@ -99,6 +85,8 @@ const Cart = () => {
                 </tbody>
             </table>
         </div>
+        </section>
+
     );
 };
 

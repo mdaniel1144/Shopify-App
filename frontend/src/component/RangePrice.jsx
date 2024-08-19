@@ -17,21 +17,21 @@ const RangePrice = ({min , max , gap , setPriceRange}) => {
 
   const handleMinPriceChange = (e) => {
     const value = parseInt(e.target.value);
-    if (maxPrice - value >= priceGap) {
+    if (maxPrice - value >= priceGap ) {
       setMinPrice(value);
     }
   }
 
   const handleMaxPriceChange = (e) => {
     const value = parseInt(e.target.value);
-    if (value - minPrice >= priceGap) {
+    if (value - minPrice >= priceGap && value<= max) {
       setMaxPrice(value);
     }
   };
 
   const handleMinRangeChange = (e) => {
     const value = parseInt(e.target.value);
-    if (maxPrice - value >= priceGap) {
+    if (maxPrice - value >= priceGap ) {
       setMinPrice(value);
     } else {
       setMinPrice(maxPrice - priceGap);
@@ -51,11 +51,11 @@ const RangePrice = ({min , max , gap , setPriceRange}) => {
     <div className="rangeprice-continer">
         <header>
             <div>
-                <input type='text' value={minPrice}/>
-                <h4>Min</h4>
+            <input type="text" value={minPrice} onChange={handleMinPriceChange}/>
+            <h4>Min</h4>
             </div>
             <div>
-                <input type='text' value={maxPrice}/>
+                <input type='text' value={maxPrice} onChange={handleMaxPriceChange} />
                 <h4>Max</h4>
             </div>
         </header>

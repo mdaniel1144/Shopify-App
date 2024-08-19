@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
-import ItemMore from './ItemMore';
 import './Item.css';
 
 const Item = ({ item }) => {
     const [isAdded, setIsAdded] = useState(false);
-    const [isItemMore , setIsItemMore] = useState(false)
     const [count, setCount] = useState(0);
     const {addItem, removeItem, changeItem } = useCart();
 
-    const handleChange = (num) => {
+    const handleChange = (num , e) => {
+        e.stopPropagation();
         setCount(prevCount => {
             const newCount = prevCount + num;
             if (newCount >= 0 && newCount <= 10 && newCount <= item.count) {
@@ -17,16 +16,18 @@ const Item = ({ item }) => {
                 return newCount;
             }
             return prevCount;
-        });
+        })
     };
 
-    const handleRemoveItems = () => {
+    const handleRemoveItems = (e) => {
+        e.stopPropagation();
         setCount(0);
         removeItem(item._id);
         setIsAdded(false);
     };
 
-    const handleInsertItems = () => {
+    const handleInsertItems = (e) => {
+        e.stopPropagation();
         if (count === 0) {
             setCount(1);
         }
@@ -40,7 +41,7 @@ const Item = ({ item }) => {
     }, [item]);
 
     return (
-        <div className='Item-container' onClick={(e)=> setIsItemMore(true)}>
+        <div className='Item-container'>
             <div className='Item-image-container'>
                 <img src={item.image ? item.image : './images/logo.png'} alt={item.name} />
             </div>
@@ -62,9 +63,9 @@ const Item = ({ item }) => {
                         </tr>
                         {item.count > 0 && ( <tr>
                             <td colSpan={2}>
-                                <button className='Item-button' onClick={() => handleChange(1)}>+</button>
+                                <button className='Item-button' onClick={(e) => handleChange(1,e)}>+</button>
                                 <label className='Item-sum'>{count}</label>
-                                <button className='Item-button' onClick={() => handleChange(-1)}>-</button>
+                                <button className='Item-button' onClick={(e) => handleChange(-1,e)}>-</button>
                                 {isAdded ?
                                     (<button id="Item-cart-added" className='Item-button' onClick={handleRemoveItems}>Added</button>) :
                                     (<button id="Item-cart-add" className='Item-button' onClick={handleInsertItems}>Add</button>)

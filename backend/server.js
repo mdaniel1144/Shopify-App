@@ -9,6 +9,7 @@ const { connectDB } = require('./config/mongoDB');
 const User = require('./models/User');
 const Product = require('./models/Product');
 const Sales = require('./models/Sales');
+const Criticism = require('./models/Criticism');
 
 
 console.log(PORT)
@@ -455,3 +456,56 @@ app.post('/payment', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
+//----------------------------------------------------
+app.get('/criticism', async (req, res) => {
+  try {
+    const { productID } = req.query;
+
+    if (!productID) 
+      return res.status(400).send('productID query parameter is required.')
+    
+    const criticisms = await Criticism.find({productID})
+    const userIDs = criticisms.map(c => c.userID);
+    const users = await User.find({ _id: { $in: userIDs } });
+
+    const criticismsWithUsernames = criticisms.map(crit => ({
+      ...crit.toObject(),
+      username: users.find(u => u._id.equals(crit.userID)).username
+    }));
+
+    console.log(`-->Criticism:\n   Get ${criticisms.length} of the criticism of productID: ${productID}`)
+    res.status(200).json(criticismsWithUsernames)
+  } catch (err) {
+    console.error('-->Criticism:\n   Error fetching criticisms:', err);
+    res.status(500).send('An error occurred while fetching criticisms.');
+  }
+});
+
+app.post('/criticism/insert', async (req, res) => {
+  try {
+    const { productID, content, userID } = req.body;
+
+    if (!productID) {
+      return res.status(400).send('productID is required.');
+    }
+
+    // Create a new Criticism document
+    const newCriticism = new Criticism({
+      productID,
+      userID,
+      dateCreated: new Date(),
+      content,
+    });
+
+    await newCriticism.save();
+    console.log(`-->Criticism: ${userID} \nCriticism insert successful`);
+    res.status(200).json({ message: 'Criticism insert successful' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+});
+

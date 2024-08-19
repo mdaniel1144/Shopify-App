@@ -40,6 +40,10 @@ const Sales = ({user}) => {
      getAllData()
   } , [])
 
+  useEffect(()=>{
+        setNumberSales(salesList.length)
+        setTotalPrice(salesList.reduce((acc, sale) => acc + sale.totalPrice, 0))
+  } , [salesList])
 
   const GetStatics = async (event) => {
     event.preventDefault();

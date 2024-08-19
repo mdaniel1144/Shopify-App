@@ -3,7 +3,7 @@ import { AuthContext } from './AuthContext';
 import { useCart } from './CartContext';
 import { FaSearch ,FaShoppingCart } from 'react-icons/fa';
 import {Route, Routes } from 'react-router-dom';
-import { Link } from 'react-router-dom'
+import { Link , useNavigate } from 'react-router-dom'
 import Logo  from './Logo';
 import ListItem from './ListItem'
 import Sales from './Sales';
@@ -21,6 +21,13 @@ const HomePage = ({user}) => {
   const {cart} = useCart()
   const {logout , setSearch } = useContext(AuthContext)
   const [isOpenSearch , setIsopenSearch] = useState(false)
+  const navigate = useNavigate();
+
+
+  const handleLogout =() =>{
+    logout()
+    navigate('/')
+  }
 
 
   return (
@@ -28,7 +35,7 @@ const HomePage = ({user}) => {
         <div className='navigation-top-container'>
             <div class="navigation-top-command">
               {user? 
-                (<button onClick={logout}>LogOut</button>)
+                (<button onClick={handleLogout}>LogOut</button>)
               : (
                 <div style={{display : 'inline-block'}}>
                   <Link to="/Login"><button>LogIn</button></Link>

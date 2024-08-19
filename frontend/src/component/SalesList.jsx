@@ -1,7 +1,6 @@
 import React, { useEffect, useState , useContext} from 'react';
 import {FaTimes} from 'react-icons/fa';
 import axios from 'axios';
-import Loading from './Loading'
 import './SalesList.css'
 
 const SalesList = ({numberOrder, salePrice ,productIds , setIsItem}) => {
