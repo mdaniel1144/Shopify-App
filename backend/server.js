@@ -507,5 +507,15 @@ app.post('/criticism/insert', async (req, res) => {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
-});
+})
+
+
+app.get('/brands', async (req, res) => {
+  try {
+    const brands = await Product.distinct('brand')
+    res.status(200).json({ brands })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch brands' })
+  }
+})
 

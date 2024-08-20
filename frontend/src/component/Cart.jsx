@@ -10,6 +10,7 @@ import './Cart.css'
 const Cart = () => {
 
     const { user } = useContext(AuthContext)
+    const navigate = useNavigate();
     const [isPayment , setIsPayment] = useState(false)
     const {cart , changeItem , removeItem } = useCart()
     const [tax] = useState(0.17)
@@ -27,8 +28,7 @@ const Cart = () => {
         const element = document.querySelector(`.modelitem-container[data-index="${removeItemId}"]`);
         //console.log(element)
         if (element) {
-          element.classList.add('cart-removeItem');
-            element.style.backgroundColor = 'lightblue';
+            element.classList.add('cart-removeItem');
         setTimeout(() => {
             removeItem(removeItemId);
         }, 350); // Wait for the highlight to be visible before removing
@@ -36,7 +36,12 @@ const Cart = () => {
     };
 
 
-    useEffect(()=>{console.log(cart)},[cart])
+    useEffect(()=>{
+        console.log(cart)
+        if (cart.items.length === 0) {
+            navigate('/');
+        }
+    } ,[cart])
   
     return (
         <section>
@@ -61,25 +66,25 @@ const Cart = () => {
                         <th>Total Price</th>
                     </tr>
                         {cart.items.map((item , index) => (
-                        <tr key={index} data-index={item.product._id} className='modelitem-container'>
-                        <td>
+                        <tr key={item.product._id} data-index={item.product._id} className='modelitem-container'>
+                        <td width='20%'>
                             <img src={item.product.image} alt=''/>
                         </td>
-                        <td width='200px'>
+                        <td width='30%'>
                                 <span>
                                     <label>Name: {item.product.name}</label>
                                     <label>Price: {item.product.price}$</label>
                                 </span>
                         </td>
-                        <td  width='50%'>
+                        <td  width='30%'>
                             <button className='Item-button' onClick={(e)=>handleChangeCountItem(item,1)}>+</button>
                             <label className='Item-sum'>{item.count}</label>
                             <button className='Item-button' onClick={(e)=>handleChangeCountItem(item,-1)}>-</button>
                         </td>
-                        <td>
+                        <td width='10%'>
                             <label>{(item.product.price * item.count).toFixed(2)}$</label>
-                        </td>
-                        <FaTimes className='cart-delete-button' onClick={(e)=>{handleRemoveItem(item)}}/>
+                        </td >
+                        <td width='10%'><FaTimes className='cart-delete-button' onClick={(e)=>{handleRemoveItem(item)}}/></td>
                         </tr>))
                         }
                 </tbody>

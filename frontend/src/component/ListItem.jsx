@@ -1,6 +1,7 @@
 import React, { useState , useEffect, useContext } from 'react';
 import RangePrice from './RangePrice';
 import { AuthContext } from './AuthContext';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Item from './Item'
 import ItemMore from './ItemMore'
@@ -8,10 +9,16 @@ import './ListItem.css'
 
 const ListItem = () => {
 
+  const {user} = useContext(AuthContext)
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if(!user)
+      navigate('/')
+  },[])
+
   const listcategory = ['Smartphone' , 'Computer' , 'Tablet' , 'Tv']
-  const listBrand = ['LG ' , 'Sony' , 'Apple' , 'Samsung']
 
-
+  const [listBrand , setBrands] = useState([])
   const [listitem , setListItem] = useState(null)
   const [isItemMore , setIsItemMore] = useState(false)
   const [selectedItem , setSelcetedItem] = useState(null)
@@ -21,6 +28,7 @@ const ListItem = () => {
   const [brand , setBrand] = useState('')
   const [priceRange , setPriceRange] = useState({'min' : 0 , 'max': 5000}) 
   const {search} = useContext(AuthContext)
+  const [listBrandSelected, setBrandSelected] = useState([]);
 
 
   const getAllProducts = async () => {
@@ -43,6 +51,15 @@ const ListItem = () => {
         return chunks;
     };
 
+    const handleFilterBrand = (selectedBrand) => {
+      setBrandSelected(prevSelectedBrands => {
+        if (prevSelectedBrands.includes(selectedBrand)) {
+          return prevSelectedBrands.filter(brand => brand !== selectedBrand);
+        } else {
+          return [...prevSelectedBrands, selectedBrand];
+        }
+      });
+    };
 
     useEffect(()=>{
         getAllProducts()
@@ -60,12 +77,35 @@ const ListItem = () => {
           setCopyListItem(filteredItems)}
       }, [priceRange]);
 
-    useEffect(()=>{
-      if(listitem){
-        const newListItem = listitem.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
-        setCopyListItem(newListItem)
+
+    useEffect(() => {
+      console.log(listBrandSelected)
+      if (listitem) {
+        const filteredItems = listitem.filter((item) => {
+          const matchesBrand =
+            listBrandSelected.length === 0 ||
+            listBrandSelected.includes(item.brand);
+          const matchesSearch = item.name
+            .toLowerCase()
+            .includes(search.toLowerCase());
+          return matchesBrand && matchesSearch;
+        });
+        setCopyListItem(filteredItems);
       }
-    }, [search])
+    }, [listBrandSelected, search, listitem]);
+
+    useEffect(() => {
+      const fetchBrands = async () => {
+        try {
+          const response = await axios.get('/brands'); // Assuming your backend is on the same origin
+          setBrands(response.data.brands);
+        } catch (err) {
+          console.error('Failed to fetch brands');
+        }
+      };
+  
+      fetchBrands();
+    }, []);
 
 
   return (
@@ -82,6 +122,17 @@ const ListItem = () => {
               <label>Price</label>
                 <RangePrice min={0}  max={5000}  gap= {50} setPriceRange={setPriceRange}/>
             </div>
+            <div className='listitem-brand'>
+              <label>Brand</label>
+              <div>
+              {listBrand.map((brand,index) => (
+                    <span key={index} onClick={() => handleFilterBrand(brand)} style={{
+                      backgroundColor: listBrandSelected.includes(brand) ? 'blue' : 'transparent',
+                      color: listBrandSelected.includes(brand) ? 'white' : 'black',
+                    }}>{brand}</span>
+                ))} 
+              </div>
+           </div>
         </div>
         <table className='listitem-table-container'>
             {listitem? 

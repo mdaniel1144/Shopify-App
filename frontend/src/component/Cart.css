@@ -89,9 +89,10 @@
 
 
 .modelitem-container{
+    display: flex;
+    font-size: larger;
     text-align: left;
     padding: 3px;
-    border-bottom: 1px solid black;
     opacity: 1;
     transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Adjust the duration and timing function as needed */
 }

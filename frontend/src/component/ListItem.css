@@ -71,3 +71,13 @@
     border-radius: 5px;
 }
 
+.listitem-brand span{
+    width: fit-content;
+    display: inline-flex;
+    font-size: large;
+    background-color: transparent;
+    border: 1px black solid;
+    border-radius: 15px;
+    padding: 5px;
+    margin: 3px;
+}

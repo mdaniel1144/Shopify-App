@@ -74,7 +74,7 @@ const Setting = ({user}) => {
                     <label>Email</label>
                 </div>
                 <div className={`setting-group-container named ${birthday !== null? 'filled': ''}`}>
-                    <input type='date' value={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder='' required/>
+                    <input type='date' value={birthday.toString().split('T')[0]} onChange={(e) => setBirthday(e.target.value)} placeholder='' required/>
                     <label>Birthday</label>
                 </div>
                 <div className={`setting-group-container named ${country !== 'none'? 'filled': ''}`}>

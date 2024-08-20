@@ -93,3 +93,7 @@
 .advanceSetting-button-update{
     right: 0px;
 }
+
+.modellist-container{
+    border-bottom: 1px black solid;
+}

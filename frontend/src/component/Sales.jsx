@@ -88,11 +88,11 @@ const Sales = ({user}) => {
     <table>
         {!isLoading? 
             (<tbody className='modellist-group-container'>
-                <tr>
-                    <th>Status</th>
-                    <th>Number Order</th>
-                    <th>Total Product</th>
-                    <th>Price</th>
+                <tr className='modelitem-container'>
+                    <td><b>Status</b></td>
+                    <td><b>Number Order</b></td>
+                    <td><b>Total Product</b></td>
+                    <td><b>Price</b></td>
                 </tr>
                 {(copySalesList.map((sale , index) => (
                   <tr key={index} className='modelitem-container' onClick={(e) => {setIsItem(!isItem); setData(sale.products) ;setNumberOrder(sale._id); setSalePrice(sale.totalPrice) }}>

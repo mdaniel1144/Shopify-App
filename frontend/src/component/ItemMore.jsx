@@ -74,7 +74,7 @@ const ItemMore = ({ item , setIsItemMore}) => {
                 ))}
                 </table>
                 <div className='itemMore-criticism-command'>
-                    <input type='text' value={content} onChange={(e)=> setContent(e.target.value)}/>
+                    <input type='text' value={content} onChange={(e)=> setContent(e.target.value)} placeholder='Type comment..'/>
                     <button onClick={(e) =>handelInsertComment(e)}>send</button>
                 </div>
             </div>
